@@ -1,13 +1,13 @@
 import { 
-  BaseCommandInteraction,
-  MessageEmbed
+  EmbedBuilder,
+  CommandInteraction,
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 import ResourceCategory from '../../../entities/ResourceCategory';
 import handleError from '../../../handlers/handleError';
 
 export default async function addCategory(
-  interaction: BaseCommandInteraction, 
+  interaction: CommandInteraction, 
   connection: DataSource,
   data: string|null
 ): Promise<void> {
@@ -43,7 +43,7 @@ export default async function addCategory(
     (e: Pick<ResourceCategory, 'category'>) => e.category
   ).join(', ');
 
-  const messageEmbed = new MessageEmbed()
+  const embed = new EmbedBuilder()
     .setColor('#0099ff')
     .setTitle('Added new categories')
     .setTimestamp()
@@ -54,7 +54,7 @@ export default async function addCategory(
 
   await interaction.followUp({ 
     content: 'Resource added.',
-    embeds: [ messageEmbed ]
+    embeds: [ embed ]
   });
   return;
 }

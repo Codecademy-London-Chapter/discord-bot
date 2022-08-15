@@ -1,13 +1,13 @@
 import { 
-  MessageEmbed,
-  BaseCommandInteraction
+  EmbedBuilder,
+  CommandInteraction
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 import ResourceCategory from '../../../entities/ResourceCategory';
 import handleError from '../../../handlers/handleError';
 
 export default async function listCategories(
-  interaction: BaseCommandInteraction, 
+  interaction: CommandInteraction, 
   connection: DataSource
 ): Promise<void> {
   try {
@@ -17,17 +17,17 @@ export default async function listCategories(
       .where("resourceCategories.deleted_at IS NULL")
       .getMany();
 
-    const messageEmbed = new MessageEmbed()
+    const embed = new EmbedBuilder()
       .setColor('#0099ff')
       .setTitle('Available resource categories')
       .setTimestamp();
 
     const fields = resourceCategories.map(e => e.category).join(', ');
-    messageEmbed.addFields({ name: 'Categories', value: fields });
+    embed.addFields({ name: 'Categories', value: fields });
 
     await interaction.followUp({ 
       content: 'Available resources',
-      embeds: [ messageEmbed ]
+      embeds: [ embed ]
     })
   } catch (e) {
     await handleError(interaction, e.message);

@@ -1,13 +1,13 @@
 import { 
-  BaseCommandInteraction,
-  MessageEmbed
+  CommandInteraction,
+  EmbedBuilder
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 import Resource from '../../../entities/Resource';
 import handleError from '../../../handlers/handleError';
 
 export default async function listResources(
-  interaction: BaseCommandInteraction, 
+  interaction: CommandInteraction, 
   connection: DataSource
 ): Promise<void> {
   try {
@@ -17,10 +17,10 @@ export default async function listResources(
       .leftJoinAndSelect("resources.resourceCategories", "resourceCategories")
       .getMany();
 
-    // MessageEmbed is limited to 10 per message 
-    const messageEmbed: MessageEmbed[] = [];
+    // EmbedBuilder is limited to 10 per message 
+    const embed: EmbedBuilder[] = [];
     for (let i = 0; i < resources.length && i < 10; i++) {
-      const tmp = new MessageEmbed()
+      const tmp = new EmbedBuilder()
         .setColor('#0099ff')
         .setURL(resources[i].url)
         .setTitle(resources[i].title)
@@ -28,7 +28,7 @@ export default async function listResources(
         .setThumbnail(resources[i].img)
         .setTimestamp(resources[i].created_at);
 
-      // MessageEmbed field values must be non empty string
+      // EmbedBuilder field values must be non empty string
       if (resources[i].resourceCategories.length) {
         const categories = resources[i].resourceCategories
           .map(e => e.category)
@@ -38,12 +38,12 @@ export default async function listResources(
           value: categories
         });
       }
-      messageEmbed.push(tmp);
+      embed.push(tmp);
     }
 
     await interaction.followUp({ 
       content: 'Available resources',
-      embeds: messageEmbed
+      embeds: embed
     })
   } catch (e) {
     await handleError(interaction, e.message);

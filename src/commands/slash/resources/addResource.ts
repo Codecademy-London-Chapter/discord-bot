@@ -1,6 +1,6 @@
 import { 
-  BaseCommandInteraction,
-  MessageEmbed
+  EmbedBuilder,
+  CommandInteraction
 } from 'discord.js';
 import { DataSource, InsertResult } from 'typeorm';
 import Resource from '../../../entities/Resource';
@@ -9,7 +9,7 @@ import handleError from '../../../handlers/handleError';
 import isURL from 'validator/lib/isURL';
 
 export default async function addResource(
-  interaction: BaseCommandInteraction, 
+  interaction: CommandInteraction, 
   connection: DataSource,
   data: { [key: string]: string|null }
 ): Promise<void> {
@@ -19,8 +19,8 @@ export default async function addResource(
     await handleError(interaction, 'Invalid required fields');
     return;
   }
-
-  // add protocol if missing and validate urls (protocol is required by MessageEmbed)
+  
+  // add protocol if missing and validate urls (protocol is required by EmbedBuilder)
   if (!url.toLowerCase().match(/^http/)) {
     url = 'https://' + url;
   }
@@ -60,8 +60,8 @@ export default async function addResource(
   console.log(`Added ${upsertResponse.identifiers.filter(e => e).length} new categories.`);
 
   const resource = { title, description, url, img: img ? img : undefined };
-
-  // insert resource and return * for MessageEmbed
+  
+  // insert resource and return * for EmbedBuilder
   let resourceResponse: InsertResult;
   try {
     resourceResponse = await connection
@@ -108,8 +108,8 @@ export default async function addResource(
   const fieldValue = categoryList.map(
     (e: Pick<ResourceCategory, 'category'>) => e.category
   ).join(', ');
-
-  const messageEmbed = new MessageEmbed()
+  
+  const embed = new EmbedBuilder()
     .setColor('#0099ff')
     .setURL(insertedResource.url)
     .setTitle(insertedResource.title)
@@ -123,7 +123,7 @@ export default async function addResource(
 
   await interaction.followUp({ 
     content: 'Resource added.',
-    embeds: [ messageEmbed ]
+    embeds: [ embed ]
   });
   return;
 }

@@ -12,12 +12,14 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@types/validator": "^13.7.5",
     "discord-api-types": "^0.37.2",
     "discord.js": "^14.1.2",
     "dotenv": "^16.0.1",
     "pg": "^8.7.3",
     "reflect-metadata": "^0.1.13",
-    "typeorm": "^0.3.7"
+    "typeorm": "^0.3.7",
+    "validator": "^13.7.0"
   },
   "devDependencies": {
     "@types/node": "^18.7.5",

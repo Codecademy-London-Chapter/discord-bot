@@ -1,13 +1,13 @@
 import { 
-  BaseCommandInteraction,
-  MessageEmbed
+  EmbedBuilder,
+  CommandInteraction,
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 import Resource from '../../../entities/Resource';
 import handleError from '../../../handlers/handleError';
 
 export default async function searchResources(
-  interaction: BaseCommandInteraction, 
+  interaction: CommandInteraction, 
   connection: DataSource,
   data: string|null
 ): Promise<void> {
@@ -42,10 +42,10 @@ export default async function searchResources(
     return;
   }
 
-  const messageEmbed: MessageEmbed[] = [];
+  const embed: EmbedBuilder[] = [];
   try {
     for (const row of resources) {
-      const tmp = new MessageEmbed()
+      const tmp = new EmbedBuilder()
         .setColor('#0099ff')
         .setURL(row.url)
         .setTitle(row.title)
@@ -53,7 +53,7 @@ export default async function searchResources(
         .setThumbnail(row.img)
         .setTimestamp(row.created_at);
 
-      // MessageEmbed field values must be non empty string
+      // EmbedBuilder field values must be non empty string
       if (row.resourceCategories.length) {
         const categories = row.resourceCategories.map(e => e.category).join(', ');
         tmp.addFields({ 
@@ -61,7 +61,7 @@ export default async function searchResources(
           value: categories
         });
       }
-      messageEmbed.push(tmp);
+      embed.push(tmp);
     }
   } catch (e) {
     await handleError(interaction, e.message);
@@ -69,8 +69,8 @@ export default async function searchResources(
   }
 
   await interaction.followUp({ 
-    content: messageEmbed.length ? 'Resources:' : 'No resources found',
-    embeds: messageEmbed
+    content: embed.length ? 'Resources:' : 'No resources found',
+    embeds: embed
   });
   return;
 }
