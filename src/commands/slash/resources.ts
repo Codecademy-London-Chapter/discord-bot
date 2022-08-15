@@ -1,7 +1,9 @@
 import { 
   Client,
   CommandInteraction,
-  CommandInteractionOptionResolver
+  CommandInteractionOptionResolver,
+  ApplicationCommandType,
+  ApplicationCommandOptionType,
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 import listResources from './resources/listResources';
@@ -81,23 +83,24 @@ async function execute(
   }
 }
 
-export const resources: SlashCommand = 
+export const resources: SlashCommand =
   {
     name: 'resources',
     description: 'Resource commands.',
+    type: ApplicationCommandType.ChatInput,
     options: [
       {
-        type: 1,
+        type: ApplicationCommandOptionType.Subcommand,
         name: 'list_resources',
         description: 'List resources.'
       },
       {
-        type: 1,
+        type: ApplicationCommandOptionType.Subcommand,
         name: 'search_resources',
         description: 'Search resources by category.',
         options: [
           {
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             name: 'category_list',
             description: "Case insensitive comma or space separated list, e.g. 'JavaScript, module async,webhook'",
             required: true,
@@ -106,46 +109,46 @@ export const resources: SlashCommand =
         ]
       },
       {
-        type: 1,
+        type: ApplicationCommandOptionType.Subcommand,
         name: 'list_categories',
         description: 'List resource categories.',
         options: []
       },
       {
-        type: 1,
+        type: ApplicationCommandOptionType.Subcommand,
         name: 'add_resource',
         description: 'Add new resource',
         options: [
           {
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             name: 'title',
             description: 'Resource title',
             required: true,
             choices: undefined
           },
           {
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             name: 'description',
             description: 'Resource description',
             required: true,
             choices: undefined
           },
           {
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             name: 'url',
             description: 'Resource URL',
             required: true,
             choices: undefined
           },
           {
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             name: 'categories',
             description: "Case insensitive comma or space separated list, e.g. 'JavaScript, module async,webhook'",
             required: true,
             choices: undefined
           },
           {
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             name: 'img',
             description: 'Image URL.',
             required: false,
@@ -154,18 +157,18 @@ export const resources: SlashCommand =
         ]
       },
       {
-        type: 1,
+        type: ApplicationCommandOptionType.Subcommand,
         name: 'remove_resource',
         description: 'Remove a resource (Requires admin privilege).',
         options: []
       },
       {
-        type: 1,
+        type: ApplicationCommandOptionType.Subcommand,
         name: 'add_categories',
         description: 'Add new resource categories.',
         options: [
           {
-            type: 3,
+            type: ApplicationCommandOptionType.String,
             name: 'categories',
             description: "Case insensitive comma or space separated list, e.g. 'JavaScript, module async,webhook'",
             required: true,
