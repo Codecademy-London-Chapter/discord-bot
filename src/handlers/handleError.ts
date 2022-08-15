@@ -1,9 +1,10 @@
 import { 
-  CommandInteraction
+  CommandInteraction,
+  ModalSubmitInteraction
 } from 'discord.js';
 
 export default async function handleError(
-  interaction: CommandInteraction,
+  interaction: CommandInteraction|ModalSubmitInteraction,
   msg: string
 ): Promise<void> {
   await interaction.followUp({

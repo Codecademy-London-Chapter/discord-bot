@@ -1,11 +1,11 @@
 import { 
-  CommandInteraction
+  ModalSubmitInteraction
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 import handleError from '../../handlers/handleError';
 
 export default async function handlePairProgrammingApplication(
-  interaction: CommandInteraction, 
+  interaction: ModalSubmitInteraction, 
   connection: DataSource
 ): Promise<void> {
   try {
