@@ -12,7 +12,7 @@ export const ping: SlashCommand = {
     client: Client,
     interaction: CommandInteraction
   ) => {
-    await interaction.followUp({
+    await interaction.reply({
       ephemeral: true,
       content: 'Pong!'
     });

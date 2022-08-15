@@ -22,6 +22,8 @@ async function execute(
 ): Promise<void> {
   try {
 
+    await interaction.deferReply();
+
     let subcommand: string = '';
     if (options && options.getSubcommand) {
       subcommand = options.getSubcommand();

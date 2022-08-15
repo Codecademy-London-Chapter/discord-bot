@@ -13,8 +13,6 @@ export default async function handleSlashCommand(
   commands: SlashCommand[]
 ): Promise<void> {
 
-  await interaction.deferReply();
-
   const { commandName, options } = interaction;
   const slashCommand = commands.find((c) => {
     return c.name === commandName;
