@@ -1,5 +1,5 @@
 
-import handlePairProgrammingApplication from 'commands/slash/handlePairProgrammingApplication';
+import handlePairProgrammingApplication from '../commands/slash/handlePairProgrammingApplication';
 import {
   Client,
   ModalSubmitInteraction
