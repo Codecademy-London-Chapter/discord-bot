@@ -1,10 +1,10 @@
 require('dotenv').config();
 import { 
   Client,
-  Intents,
   Interaction,
   Message,
-  GuildMember
+  GuildMember,
+  GatewayIntentBits
  } from 'discord.js';
 import { REST } from '@discordjs/rest';
 import { Routes } from 'discord-api-types/v9';
@@ -22,10 +22,10 @@ if (!TOKEN || !GUILD_ID || !CLIENT_ID) {
 
 // Create a client instance and set permissions. Do not edit permissions without approval.
 const client = new Client({ 
-  intents: [
-    Intents.FLAGS.GUILDS, 
-    Intents.FLAGS.GUILD_MESSAGES, 
-    Intents.FLAGS.GUILD_MEMBERS
+  intents: [ 
+    GatewayIntentBits.Guilds, 
+    GatewayIntentBits.GuildMembers,
+    GatewayIntentBits.GuildMessages
   ]
 });
 
@@ -90,7 +90,7 @@ async function registerCommands(
   token: string
 ): Promise<void> {
 
-  const rest = new REST({ version: '9' }).setToken(token);
+  const rest = new REST({ version: '10' }).setToken(token);
 
   // push new commands
   try {
