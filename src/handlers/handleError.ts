@@ -1,9 +1,9 @@
 import { 
-  BaseCommandInteraction
+  CommandInteraction
 } from 'discord.js';
 
 export default async function handleError(
-  interaction: BaseCommandInteraction,
+  interaction: CommandInteraction,
   msg: string
 ): Promise<void> {
   await interaction.followUp({
