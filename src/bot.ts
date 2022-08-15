@@ -14,6 +14,7 @@ import { DataSource } from 'typeorm';
 import { dataSource } from './dataSource';
 import handleSlashCommand from './handlers/handleSlashCommand';
 import handleMessageCreate from './handlers/handleMessageCreate';
+import handleModalSubmit from './handlers/handleModalSubmit';
 import type { SlashCommand } from './types';
 
 const { TOKEN, GUILD_ID, CLIENT_ID } = process.env;
@@ -65,6 +66,9 @@ function interactionCreate(
   client.on("interactionCreate", async (interaction: Interaction) => {
     if (interaction.type === InteractionType.ApplicationCommand) {
       await handleSlashCommand(client, interaction, connection, commands);
+    }
+    if (interaction.type === InteractionType.ModalSubmit) {
+      await handleModalSubmit(client, interaction, connection);
     }
   });
 }
