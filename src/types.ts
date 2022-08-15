@@ -1,22 +1,21 @@
 import { 
   Client,
-  CacheType,
-  BaseCommandInteraction,
+  CommandInteraction,
   ChatInputApplicationCommandData,
-  CommandInteractionOptionResolver
+  CommandInteractionOptionResolver,
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 
-// execute function signature
+// SlashCommand execute function signature
 interface SlashCommandExecutable {
   (
     client: Client, 
-    interaction: BaseCommandInteraction,
+    interaction: CommandInteraction,
     connection: DataSource,
-    options?: Omit<CommandInteractionOptionResolver<CacheType>, "getMessage" | "getFocused">
+    options?: Partial<CommandInteractionOptionResolver>,
   ): Promise<void>;
 }
 
 export interface SlashCommand extends ChatInputApplicationCommandData {
-  execute: SlashCommandExecutable
+  execute: SlashCommandExecutable;
 } 
