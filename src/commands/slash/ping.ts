@@ -1,6 +1,6 @@
 import { 
   Client, 
-  BaseCommandInteraction
+  CommandInteraction
 } from "discord.js";
 import type { SlashCommand } from '../../types';
 
@@ -10,7 +10,7 @@ export const ping: SlashCommand = {
   type: 1,
   execute: async (
     client: Client,
-    interaction: BaseCommandInteraction
+    interaction: CommandInteraction
   ) => {
     await interaction.followUp({
       ephemeral: true,

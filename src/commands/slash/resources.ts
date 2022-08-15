@@ -1,7 +1,6 @@
 import { 
   Client,
-  CacheType,
-  BaseCommandInteraction,
+  CommandInteraction,
   CommandInteractionOptionResolver
 } from 'discord.js';
 import { DataSource } from 'typeorm';
@@ -15,14 +14,14 @@ import type { SlashCommand } from '../../types';
 
 async function execute(
   client: Client, 
-  interaction: BaseCommandInteraction,
+  interaction: CommandInteraction,
   connection: DataSource,
-  options?: Omit<CommandInteractionOptionResolver<CacheType>, "getMessage" | "getFocused">
+  options?: Partial<CommandInteractionOptionResolver>
 ): Promise<void> {
   try {
 
     let subcommand: string = '';
-    if (options) {
+    if (options && options.getSubcommand) {
       subcommand = options.getSubcommand();
     } else {
       await handleError(interaction, 'Invalid or missing subcommand');
@@ -42,26 +41,32 @@ async function execute(
       }
 
       case 'search_resources': {
-        const option = options.getString('category_list');
-        await searchResources(interaction, connection, option);
+        if (options.getString) {
+          const option = options.getString('category_list');
+          await searchResources(interaction, connection, option);
+        } 
         break;
       }
 
       case 'add_categories': {
-        const option = options.getString('categories');
-        await addCategory(interaction, connection, option);
+        if (options.getString) {
+          const option = options.getString('categories');
+          await addCategory(interaction, connection, option);
+        }
         break;
       }
 
       case 'add_resource': {
-        const option = {
-          title: options.getString('title'),
-          description: options.getString('description'),
-          url: options.getString('url'),
-          img: options.getString('img'),
-          categories: options.getString('categories')
+        if (options.getString) {
+          const option = {
+            title: options.getString('title'),
+            description: options.getString('description'),
+            url: options.getString('url'),
+            img: options.getString('img'),
+            categories: options.getString('categories')
+          }
+          await addResource(interaction, connection, option);
         }
-        await addResource(interaction, connection, option);
         break;
       }
 
