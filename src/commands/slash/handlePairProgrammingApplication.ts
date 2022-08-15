@@ -9,7 +9,7 @@ export default async function handlePairProgrammingApplication(
   connection: DataSource
 ): Promise<void> {
   try {
-    await interaction.followUp({ 
+    await interaction.reply({ 
       content: 'Pair programming'
     })
   } catch (e) {
