@@ -1,6 +1,5 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
-import User from "./entities/User";
 import Resource from "./entities/Resource";
 import ResourceCategory from "./entities/ResourceCategory";
 
@@ -13,7 +12,7 @@ export const dataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: false,
   logging: true,
-  entities: [ User, Resource, ResourceCategory ],
+  entities: [ Resource, ResourceCategory ],
   subscribers: [],
   migrations: [],
 });
