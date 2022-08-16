@@ -13,6 +13,12 @@ export default class PairProgrammingApplication extends BaseEntity {
   @Column({ nullable: false })
   username: string;
 
+  @Column({ 
+    name: 'user_id',
+    nullable: false
+  })
+  userID: string;
+
   @Column({ nullable: false })
   email: string;
 
