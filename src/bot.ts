@@ -17,8 +17,8 @@ import handleMessageCreate from './handlers/handleMessageCreate';
 import handleModalSubmit from './handlers/handleModalSubmit';
 import type { SlashCommand } from './types';
 
-const { TOKEN, GUILD_ID, CLIENT_ID } = process.env;
-if (!TOKEN || !GUILD_ID || !CLIENT_ID) {
+const { TOKEN, GUILD_IDS, CLIENT_ID } = process.env;
+if (!TOKEN || !GUILD_IDS || !CLIENT_ID) {
   throw new Error('Invalid or missing environment variable');
 }
 
@@ -42,7 +42,8 @@ dataSource.initialize()
     ready(client);
 
     // register commands and authenticate client
-    registerCommands(commands, CLIENT_ID, GUILD_ID, TOKEN);
+    const guildIDs = GUILD_IDS.split(',');
+    registerCommands(commands, CLIENT_ID, guildIDs, TOKEN);
     client.login(TOKEN);
   })
   .catch((err) => {
@@ -91,7 +92,7 @@ function guildMemberAdd(client: Client): void {
 async function registerCommands(
   commands: SlashCommand[],
   clientID: string,
-  guildID: string,
+  guildIDs: string[],
   token: string
 ): Promise<void> {
 
@@ -99,23 +100,27 @@ async function registerCommands(
 
   // push new commands
   try {
-    await rest.put(
-      Routes.applicationGuildCommands(clientID, guildID),
-      { body: commands }
-    );
+    for (const guildID of guildIDs) {
+      await rest.put(
+        Routes.applicationGuildCommands(clientID, guildID),
+        { body: commands }
+        );
+      }
   } catch (e) {
     console.error(e);
   }
 
   // log guild command list
   try {
-    const guildCommands = await rest.get(
-      Routes.applicationGuildCommands(clientID, guildID)
-    );
-    if (Array.isArray(guildCommands)) {
-      console.log('Available guild commands: ');
-      for (const command of guildCommands) {
-        console.log(` - ${command.name}`);
+    for (const guildID of guildIDs) {
+      const guildCommands = await rest.get(
+        Routes.applicationGuildCommands(clientID, guildID)
+      );
+      if (Array.isArray(guildCommands)) {
+        console.log(`Server ${guildID} guild commands: `);
+        for (const command of guildCommands) {
+          console.log(` - ${command.name}`);
+        }
       }
     }
   } catch (e) {
