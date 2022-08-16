@@ -28,6 +28,14 @@ async function execute(
   const preferredLanguageInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
     .addComponents(preferredLanguageInput);
 
+  const preferredLanguageProficiencyInput = new TextInputBuilder()
+    .setCustomId('preferredLanguageProficiency')
+    .setLabel("Preferred language proficiency. Number 1 - 10")
+    .setStyle(TextInputStyle.Short);
+
+  const preferredLanguageProficiencyInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
+    .addComponents(preferredLanguageProficiencyInput);
+
   const languageSkillsInput = new TextInputBuilder()
     .setCustomId('languageSkills')
     .setLabel("Language skills")
@@ -42,6 +50,7 @@ async function execute(
 
   modal.addComponents(
     preferredLanguageInputRow,
+    preferredLanguageProficiencyInputRow,
     languageSkillsInputRow
   );
   await interaction.showModal(modal);
