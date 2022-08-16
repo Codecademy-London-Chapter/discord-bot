@@ -22,12 +22,21 @@ export default class PairProgrammingApplication extends BaseEntity {
   @Column({ nullable: false })
   email: string;
 
-  @Column({ nullable: false })
-  session_date: Date;
+  @Column({
+    name: 'session_date',
+    nullable: false
+  })
+  sessionDate: Date;
 
-  @Column({ nullable: false })
-  preferred_language: string;
+  @Column({ 
+    name: 'preferred_language',
+    nullable: false 
+  })
+  preferredLanguage: string;
 
-  @Column({ nullable: false })
-  language_skills: string[];
+  @Column({ 
+    name: 'language_skills',
+    nullable: false
+  })
+  languageSkills: string[];
 }
