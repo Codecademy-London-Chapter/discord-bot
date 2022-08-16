@@ -33,6 +33,12 @@ export default class PairProgrammingApplication extends BaseEntity {
   preferredLanguage: string;
 
   @Column({ 
+    name: 'preferred_language_proficiency',
+    nullable: false 
+  })
+  preferredLanguageProficiency: number;
+
+  @Column({ 
     name: 'language_skills',
     nullable: false
   })
