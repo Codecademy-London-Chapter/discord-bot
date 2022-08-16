@@ -42,8 +42,7 @@ dataSource.initialize()
     ready(client);
 
     // register commands and authenticate client
-    const guildIDs = GUILD_IDS.split(',');
-    registerCommands(commands, CLIENT_ID, guildIDs, TOKEN);
+    registerCommands(commands, CLIENT_ID, GUILD_IDS.split(','), TOKEN);
     client.login(TOKEN);
   })
   .catch((err) => {
