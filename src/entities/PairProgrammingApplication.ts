@@ -20,9 +20,6 @@ export default class PairProgrammingApplication extends BaseEntity {
   })
   userID: Snowflake;
 
-  @Column({ nullable: false })
-  email: string;
-
   @Column({
     name: 'session_date',
     nullable: false
