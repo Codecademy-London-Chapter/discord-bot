@@ -19,18 +19,26 @@ export default async function handlePairProgrammingApplication(
   } = interaction.user;
 
   const preferredLanguage = interaction.fields.getTextInputValue('preferredLanguage');
+  const proficiency = interaction.fields.getTextInputValue('preferredLanguageProficiency');
   const languageSkills = interaction.fields.getTextInputValue('languageSkills');
+
+  const preferredLanguageProficiency = Number(proficiency);
+  if (Number.isNaN(preferredLanguageProficiency)) {
+    return await handleError(interaction, 'Proficiency must be a number. Please resubmit.');
+  }
+
+  console.log(typeof preferredLanguageProficiency, preferredLanguageProficiency);
 
   const pairProgrammingRepository = connection.getRepository(PairProgrammingApplication);
   const application = pairProgrammingRepository.create({
     username,
     userID,
     preferredLanguage,
+    preferredLanguageProficiency,
     languageSkills
   });
 
-  const returnedApplication = await pairProgrammingRepository.save(application);
-  console.log(returnedApplication);
+  await pairProgrammingRepository.save(application);
 
   const embed = new EmbedBuilder()
     .setColor('#0099ff')
@@ -51,7 +59,6 @@ export default async function handlePairProgrammingApplication(
       ephemeral: true
     });
   } catch (e) {
-    await handleError(interaction, e.message);
-    return;
+    return await handleError(interaction, e.message);
   }
 }
