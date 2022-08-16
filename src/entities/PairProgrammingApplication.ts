@@ -36,5 +36,5 @@ export default class PairProgrammingApplication extends BaseEntity {
     name: 'language_skills',
     nullable: false
   })
-  languageSkills: string[];
+  languageSkills: string;
 }
