@@ -1,3 +1,4 @@
+import { Snowflake } from "discord.js";
 import { 
   Entity, 
   Column, 
@@ -17,7 +18,7 @@ export default class PairProgrammingApplication extends BaseEntity {
     name: 'user_id',
     nullable: false
   })
-  userID: string;
+  userID: Snowflake;
 
   @Column({ nullable: false })
   email: string;
