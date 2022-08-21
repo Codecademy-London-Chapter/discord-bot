@@ -5,7 +5,7 @@ import breakReminder from "./breakReminder";
 import mentalHealthHelp from "./mentalHealthHelp";
 import { ping } from "./ping";
 import { resources } from "./resources";
-import { pairProgramming } from "./pairProgramming";
+import { pairProgrammingApplication } from "./pairProgrammingApplication";
 import type { SlashCommand } from '../../types';
 
 // js exports
@@ -21,6 +21,6 @@ const jscmds = [
 export const commands: SlashCommand[] = [
   ping,
   resources,
-  pairProgramming,
+  pairProgrammingApplication,
   ...jscmds
 ];

@@ -56,8 +56,8 @@ async function execute(
   await interaction.showModal(modal);
 }
 
-export const pairProgramming: SlashCommand = {
-  name: "pairs",
+export const pairProgrammingApplication: SlashCommand = {
+  name: "pair_programming_application",
   description: "Sign up for pair programming",
   type: ApplicationCommandType.ChatInput,
   execute
