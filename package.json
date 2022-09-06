@@ -6,7 +6,8 @@
     "start": "ts-node ./build/bot.js",
     "dev": "nodemon ./src/bot.ts",
     "build": "tsc",
-    "test": "vitest run --coverage",
+    "test": "source .env.test.local && vitest run --coverage",
+    "test:ci": "vitest run --coverage",
     "test:watch": "vitest --coverage"
   },
   "keywords": [],
