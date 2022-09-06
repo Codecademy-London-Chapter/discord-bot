@@ -6,7 +6,8 @@
     "start": "ts-node ./build/bot.js",
     "dev": "nodemon ./src/bot.ts",
     "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "vitest run --coverage",
+    "test:watch": "vitest --coverage"
   },
   "keywords": [],
   "author": "",
@@ -23,9 +24,11 @@
   },
   "devDependencies": {
     "@types/node": "^18.7.5",
+    "@vitest/coverage-c8": "^0.23.1",
     "nodemon": "^2.0.19",
     "ts-node": "^10.9.1",
-    "typescript": "^4.7.4"
+    "typescript": "^4.7.4",
+    "vitest": "^0.23.1"
   },
   "description": ""
 }
