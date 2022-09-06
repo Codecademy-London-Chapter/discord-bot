@@ -1,0 +1,33 @@
+name: CI tests
+on: [push]
+jobs:
+  test-runner:
+    runs-on: ubuntu-latest # configure runner environment
+    container: node:latest # docker container to run steps in
+    services: # configure service containers
+      postgres:
+        image: postgres # docker hub postgres image
+        env: 
+          POSTGRES_PASSWORD: postgres # provide postgres password
+        options: >- # health checks will poll postgres until started
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+      redis:
+        image: redis # docker hub redis image
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    steps:
+    - uses: actions/checkout@v3
+    - run: npm install
+    - run: npm run test:ci # run the "test:ci" package script
+      env:
+        TEST_POSTGRES_HOST: ${{ secrets.TEST_POSTGRES_HOST }}
+        TEST_POSTGRES_PORT: ${{ secrets.TEST_POSTGRES_PORT }}
+        TEST_POSTGRES_USER: ${{ secrets.TEST_POSTGRES_USER }}
+        TEST_POSTGRES_PASSWORD: ${{ secrets.TEST_POSTGRES_PASSWORD }}
+        TEST_POSTGRES_DATABASE: ${{ secrets.TEST_POSTGRES_DATABASE }}
