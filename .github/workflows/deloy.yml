@@ -1,3 +1,6 @@
+# connect to the server, pull, build and start the service
+# retain ssh key on each login: https://stackoverflow.com/a/38980986
+
 name: deploy
 on:
   push:
@@ -5,14 +8,9 @@ on:
       - main
   workflow_dispatch:
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v1
-
-      - run: npm install
-      - run: npm run build
 
       - name: Install SSH Key
         uses: shimataro/ssh-key-action@v2
@@ -23,9 +21,6 @@ jobs:
       - name: Adding Known Hosts
         run: ssh-keyscan -p ${{ secrets.SSH_PORT}} -H ${{ secrets.SSH_HOST }} >> ~/.ssh/known_hosts
 
-      - name: Deploy with rsync
-        run: rsync -avzn -e "ssh -p ${{ secrets.SSH_PORT }}" ./code-academy/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/code-academy/
-
       - name: Restart Node Server
         uses: appleboy/ssh-action@master
         with:
@@ -34,10 +29,11 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
-            cd /code-academy
-            git fetch origin master
-            git reset --hard FETCH_HEAD
-            git clean -d -f --exclude secrets
-            npm install --production
-            chown $(whoami) . # PM2 doesn't recognize root user from Github Actions
-            npm run restart
+            source "$HOME/.nvm/nvm.sh"
+            eval `ssh-agent -s`
+            ssh-add ~/.ssh/github
+            cd ~/code-academy/discord-bot
+            git pull origin main
+            yarn install
+            yarn build
+            yarn restart
