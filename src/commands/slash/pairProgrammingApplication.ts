@@ -20,6 +20,8 @@ async function execute(
   options?: Partial<CommandInteractionOptionResolver>
 ): Promise<void> {
 
+  // create text inputs for the users preferred language, their
+  // proficiency, and any other language skills.
   const preferredLanguageInput = new TextInputBuilder()
     .setCustomId('preferredLanguage')
     .setLabel("Preferred language")
@@ -35,6 +37,7 @@ async function execute(
     .setLabel("Language skills")
     .setStyle(TextInputStyle.Short);
 
+  // create action row components and attached them to the Modal
   const preferredLanguageInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
     .addComponents(preferredLanguageInput);
 
