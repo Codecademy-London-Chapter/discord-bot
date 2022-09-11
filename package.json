@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "bot.js",
   "scripts": {
-    "start": "ts-node ./build/bot.js",
+    "start": "pm2 start ./build/bot.js",
+    "restart": "pm2 restart ./build/bot.js",
     "dev": "nodemon ./src/bot.ts",
     "build": "tsc",
     "test": "source .env.test.local && vitest run --coverage",
