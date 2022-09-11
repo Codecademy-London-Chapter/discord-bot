@@ -25,21 +25,21 @@ async function execute(
     .setLabel("Preferred language")
     .setStyle(TextInputStyle.Short);
 
-  const preferredLanguageInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
-    .addComponents(preferredLanguageInput);
-
   const preferredLanguageProficiencyInput = new TextInputBuilder()
     .setCustomId('preferredLanguageProficiency')
     .setLabel("Preferred language proficiency. Number 1 - 10")
     .setStyle(TextInputStyle.Short);
 
-  const preferredLanguageProficiencyInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
-    .addComponents(preferredLanguageProficiencyInput);
-
   const languageSkillsInput = new TextInputBuilder()
     .setCustomId('languageSkills')
     .setLabel("Language skills")
     .setStyle(TextInputStyle.Short);
+
+  const preferredLanguageInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
+    .addComponents(preferredLanguageInput);
+
+  const preferredLanguageProficiencyInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
+    .addComponents(preferredLanguageProficiencyInput);
 
   const languageSkillsInputRow = new ActionRowBuilder<ModalActionRowComponentBuilder>()
     .addComponents(languageSkillsInput);
