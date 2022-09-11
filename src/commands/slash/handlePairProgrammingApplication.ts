@@ -27,8 +27,6 @@ export default async function handlePairProgrammingApplication(
     return await handleError(interaction, 'Proficiency must be a number. Please resubmit.');
   }
 
-  console.log(typeof preferredLanguageProficiency, preferredLanguageProficiency);
-
   const pairProgrammingRepository = connection.getRepository(PairProgrammingApplication);
   const application = pairProgrammingRepository.create({
     username,
