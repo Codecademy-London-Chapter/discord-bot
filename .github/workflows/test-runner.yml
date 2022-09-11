@@ -1,7 +1,7 @@
 name: CI tests
 on:
   push:
-    ignore-branch:
+    branches-ignore:
       - 'main'
 jobs:
   test-runner:
