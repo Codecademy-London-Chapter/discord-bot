@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "bot.js",
   "scripts": {
-    "start": "pm2 start ./build/bot.js",
+    "start": "ts-node ./build/bot.js",
     "restart": "pm2 restart ./build/bot.js",
     "dev": "nodemon ./src/bot.ts",
     "build": "tsc",
