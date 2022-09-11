@@ -1,5 +1,8 @@
 name: CI tests
-on: [push]
+on:
+  push:
+    ignore-branch:
+      - 'main'
 jobs:
   test-runner:
     runs-on: ubuntu-latest # configure runner environment
