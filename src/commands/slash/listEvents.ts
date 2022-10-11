@@ -35,10 +35,14 @@ export default async function execute(
       .getMany();
 
     if (!events) {
-      throw new Error('Error getting events')
+      await interaction.followUp({
+        content: 'No events found'
+      });
+      return;
     }
   } catch (e) {
-    return await handleError(interaction, e.message);
+    await handleError(interaction, e.message);
+    return;
   }
 
   // create list of events - EmbedBuilder is limited to 10 per message 
@@ -62,9 +66,11 @@ export default async function execute(
     await interaction.followUp({
       content: 'Scheduled events',
       embeds: embed
-    })
+    });
+    return;
   } catch (e) {
-    return await handleError(interaction, e.message);
+    await handleError(interaction, e.message);
+    return;
   }
 }
 
