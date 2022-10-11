@@ -16,6 +16,7 @@
   "license": "ISC",
   "dependencies": {
     "@types/validator": "^13.7.5",
+    "date-fns": "^2.29.3",
     "discord-api-types": "^0.37.2",
     "discord.js": "^14.1.2",
     "dotenv": "^16.0.1",
