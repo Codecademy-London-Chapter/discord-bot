@@ -1,8 +1,10 @@
 import "reflect-metadata";
 import { DataSource } from "typeorm";
+import Event from "./entities/Event";
 import Resource from "./entities/Resource";
 import ResourceCategory from "./entities/ResourceCategory";
 import PairProgrammingApplication from "./entities/PairProgrammingApplication";
+import path from "node:path";
 
 export const dataSource = new DataSource({
   type: "postgres",
@@ -13,7 +15,9 @@ export const dataSource = new DataSource({
   database: process.env.DB_NAME,
   synchronize: false,
   logging: true,
-  entities: [ Resource, ResourceCategory, PairProgrammingApplication ],
+  entities: [
+    path.resolve(__dirname, 'entities/*{.ts,.js}') // ts required for ts-node and js for tsc build
+  ],
   subscribers: [],
   migrations: [],
 });
