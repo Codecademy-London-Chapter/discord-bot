@@ -30,13 +30,33 @@ export default async function searchResources(
   const resourceRepository = connection.getRepository(Resource);
   let resources: Resource[] = [];
   try {
-    resources = await resourceRepository
-      .createQueryBuilder("resources")
-      .innerJoinAndSelect("resources.resourceCategories", "resourceCategories")
-      .where("lower(resourceCategories.category) LIKE ANY (ARRAY[:...categories])", { 
-        categories
+
+    const promises = categories.map((category) => {
+      return resourceRepository
+        .createQueryBuilder("resources")
+        .innerJoinAndSelect("resources.resourceCategories", "resourceCategories")
+        .where("lower(resourceCategories.category) LIKE '%' || :category || '%'", {
+          category
+        })
+        .getMany();
+    })
+
+    // remove any duplicate resources due to category overlap
+    await Promise.all(promises)
+      .then((data) => {
+        resources = data
+          .flat()
+          .reduce((resources: Resource[], resource: Resource) => {
+            if (resources.findIndex((e) => e.id === resource.id) < 0) {
+              resources.push(resource);
+            }
+            return resources;
+          }, []);
       })
-      .getMany();
+      .catch((e) => {
+        throw e;
+      })
+
   } catch (e) {
     await handleError(interaction, e.message);
     return;
