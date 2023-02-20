@@ -64,4 +64,22 @@ describe("getCategoriesFromString", () => {
       expect(categories).toEqual(["one", "two", "three"]);
     });
   });
+
+  describe("given an empty string", () => {
+    it("should return an empty array", () => {
+      const categoryString = "";
+      const categories = getCategoriesFromString(categoryString);
+
+      expect(categories).toEqual([]);
+    });
+  });
+
+  describe("given an string of delimiters only", () => {
+    it("should return an empty array", () => {
+      const categoryString = ", , \t , \r, \n,";
+      const categories = getCategoriesFromString(categoryString);
+
+      expect(categories).toEqual([]);
+    });
+  });
 });

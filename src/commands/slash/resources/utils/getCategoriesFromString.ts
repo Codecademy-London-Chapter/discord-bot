@@ -2,6 +2,10 @@
 const categoryStringDelimiters = new RegExp(/\s*\,\s*/g);
 
 export default function getCategoriesFromString(categories: string): string[] {
+  if (!categories.length) {
+    return [];
+  }
+
   return categories
     .toLowerCase()
     .split(categoryStringDelimiters)
