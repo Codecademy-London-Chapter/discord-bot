@@ -14,9 +14,7 @@ export default async function searchResources(
 ): Promise<void> {
 
   if (!categories || !categories.length) {
-    await interaction.followUp({
-      content: 'Invalid categories'
-    });
+    await handleError(interaction, 'Invalid categories');
     return;
   }
 
@@ -24,9 +22,7 @@ export default async function searchResources(
   const categoryList = getCategoriesFromString(categories);
 
   if (!categoryList || !categoryList.length) {
-    await interaction.followUp({
-      content: 'Invalid categories'
-    });
+    await handleError(interaction, 'Invalid categories');
     return;
   }
 
@@ -91,9 +87,14 @@ export default async function searchResources(
     return;
   }
 
-  await interaction.followUp({
-    content: embed.length ? 'Resources:' : 'No resources found',
-    embeds: embed
-  });
-  return;
+  try {
+    await interaction.followUp({
+      content: embed.length ? 'Resources:' : 'No resources found',
+      embeds: embed
+    });
+    return;
+  } catch (e) {
+    await handleError(interaction, e.message);
+    return;
+  }
 }
