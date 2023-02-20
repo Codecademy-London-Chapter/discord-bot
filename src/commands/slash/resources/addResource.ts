@@ -1,4 +1,4 @@
-import { 
+import {
   EmbedBuilder,
   CommandInteraction
 } from 'discord.js';
@@ -7,11 +7,12 @@ import Resource from '../../../entities/Resource';
 import ResourceCategory from '../../../entities/ResourceCategory';
 import handleError from '../../../handlers/handleError';
 import isURL from 'validator/lib/isURL';
+import getCategoriesFromString from './utils/getCategoriesFromString';
 
 export default async function addResource(
-  interaction: CommandInteraction, 
+  interaction: CommandInteraction,
   connection: DataSource,
-  data: { [key: string]: string|null }
+  data: { [key: string]: string | null }
 ): Promise<void> {
 
   let { title, description, url, img, categories } = data;
@@ -19,7 +20,7 @@ export default async function addResource(
     await handleError(interaction, 'Invalid required fields');
     return;
   }
-  
+
   // add protocol if missing and validate urls (protocol is required by EmbedBuilder)
   if (!url.toLowerCase().match(/^http/)) {
     url = 'https://' + url;
@@ -40,19 +41,15 @@ export default async function addResource(
   }
 
   // split categories string
-  const categoryList = categories
-    .toLowerCase()
-    .split(/\,\s|\,|\s/g)
-    .filter(e => e)
-    .map(e => ({ category: e }));
+  const categoryList = getCategoriesFromString(categories);
 
   // upsert resource_categories to capture any new categories
   const resourceCategoryRepository = connection.getRepository(ResourceCategory);
   const upsertResponse = await resourceCategoryRepository
     .upsert(
-      [ ...categoryList ],
+      categoryList.map((category) => ({ category })),
       {
-        conflictPaths: [ "category" ],
+        conflictPaths: ["category"],
         skipUpdateIfNoValuesChanged: true,
       },
     );
@@ -60,7 +57,7 @@ export default async function addResource(
   console.log(`Added ${upsertResponse.identifiers.filter(e => e).length} new categories.`);
 
   const resource = { title, description, url, img: img ? img : undefined };
-  
+
   // insert resource and return * for EmbedBuilder
   let resourceResponse: InsertResult;
   try {
@@ -87,8 +84,8 @@ export default async function addResource(
   const resourceCategories = await resourceCategoryRepository
     .createQueryBuilder("resourceCategories")
     .where("resourceCategories.deleted_at IS NULL")
-    .andWhere("resourceCategories.category IN (:...categoryList)", { 
-      categoryList: categoryList.map(e => e.category)
+    .andWhere("resourceCategories.category IN (:...categoryList)", {
+      categoryList
     })
     .getMany();
 
@@ -105,10 +102,8 @@ export default async function addResource(
     return;
   }
 
-  const fieldValue = categoryList.map(
-    (e: Pick<ResourceCategory, 'category'>) => e.category
-  ).join(', ');
-  
+  const fieldValue = categoryList.join(', ');
+
   const embed = new EmbedBuilder()
     .setColor('#0099ff')
     .setURL(insertedResource.url)
@@ -116,14 +111,14 @@ export default async function addResource(
     .setDescription(insertedResource.description)
     .setThumbnail(insertedResource.img)
     .setTimestamp(insertedResource.created_at)
-    .addFields({ 
-      name: 'Categories', 
+    .addFields({
+      name: 'Categories',
       value: fieldValue
     });
 
-  await interaction.followUp({ 
+  await interaction.followUp({
     content: 'Resource added.',
-    embeds: [ embed ]
+    embeds: [embed]
   });
   return;
 }
