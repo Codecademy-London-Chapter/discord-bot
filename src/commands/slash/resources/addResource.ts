@@ -36,12 +36,19 @@ export default async function addResource(
       img = 'https://' + img;
     }
     if (!isURL(img)) {
-      return await handleError(interaction, 'Invalid img url');
+      await handleError(interaction, 'Invalid img url');
+      return;
     }
   }
 
   // split categories string
   const categoryList = getCategoriesFromString(categories);
+
+  // categories are required for new resources
+  if (!categoryList || !categoryList.length) {
+    await handleError(interaction, 'Invalid categories');
+    return;
+  }
 
   // upsert resource_categories to capture any new categories
   const resourceCategoryRepository = connection.getRepository(ResourceCategory);
