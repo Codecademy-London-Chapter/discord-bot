@@ -1,4 +1,4 @@
-import { 
+import {
   Client,
   CommandInteraction,
   CommandInteractionOptionResolver,
@@ -15,7 +15,7 @@ import handleError from '../../handlers/handleError';
 import type { SlashCommand } from '../../types';
 
 async function execute(
-  client: Client, 
+  client: Client,
   interaction: CommandInteraction,
   connection: DataSource,
   options?: Partial<CommandInteractionOptionResolver>
@@ -48,7 +48,7 @@ async function execute(
         if (options.getString) {
           const option = options.getString('category_list');
           await searchResources(interaction, connection, option);
-        } 
+        }
         break;
       }
 
@@ -77,7 +77,7 @@ async function execute(
       default: {
         throw new Error('Invalid subcommand.');
       }
-      
+
     }
   } catch (e) {
     await handleError(interaction, e.message);
@@ -86,98 +86,98 @@ async function execute(
 }
 
 export const resources: SlashCommand =
-  {
-    name: 'resources',
-    description: 'Resource commands.',
-    type: ApplicationCommandType.ChatInput,
-    options: [
-      {
-        type: ApplicationCommandOptionType.Subcommand,
-        name: 'list_resources',
-        description: 'List resources.'
-      },
-      {
-        type: ApplicationCommandOptionType.Subcommand,
-        name: 'search_resources',
-        description: 'Search resources by category.',
-        options: [
-          {
-            type: ApplicationCommandOptionType.String,
-            name: 'category_list',
-            description: "Case insensitive comma or space separated list, e.g. 'JavaScript, module async,webhook'",
-            required: true,
-            choices: undefined
-          }
-        ]
-      },
-      {
-        type: ApplicationCommandOptionType.Subcommand,
-        name: 'list_categories',
-        description: 'List resource categories.',
-        options: []
-      },
-      {
-        type: ApplicationCommandOptionType.Subcommand,
-        name: 'add_resource',
-        description: 'Add new resource',
-        options: [
-          {
-            type: ApplicationCommandOptionType.String,
-            name: 'title',
-            description: 'Resource title',
-            required: true,
-            choices: undefined
-          },
-          {
-            type: ApplicationCommandOptionType.String,
-            name: 'description',
-            description: 'Resource description',
-            required: true,
-            choices: undefined
-          },
-          {
-            type: ApplicationCommandOptionType.String,
-            name: 'url',
-            description: 'Resource URL',
-            required: true,
-            choices: undefined
-          },
-          {
-            type: ApplicationCommandOptionType.String,
-            name: 'categories',
-            description: "Case insensitive comma or space separated list, e.g. 'JavaScript, module async,webhook'",
-            required: true,
-            choices: undefined
-          },
-          {
-            type: ApplicationCommandOptionType.String,
-            name: 'img',
-            description: 'Image URL.',
-            required: false,
-            choices: undefined
-          },
-        ]
-      },
-      {
-        type: ApplicationCommandOptionType.Subcommand,
-        name: 'remove_resource',
-        description: 'Remove a resource (Requires admin privilege).',
-        options: []
-      },
-      {
-        type: ApplicationCommandOptionType.Subcommand,
-        name: 'add_categories',
-        description: 'Add new resource categories.',
-        options: [
-          {
-            type: ApplicationCommandOptionType.String,
-            name: 'categories',
-            description: "Case insensitive comma or space separated list, e.g. 'JavaScript, module async,webhook'",
-            required: true,
-            choices: undefined
-          }
-        ]
-      }
-    ],
-    execute
-  }
+{
+  name: 'resources',
+  description: 'Resource commands.',
+  type: ApplicationCommandType.ChatInput,
+  options: [
+    {
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'list_resources',
+      description: 'List resources.'
+    },
+    {
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'search_resources',
+      description: 'Search resources by category.',
+      options: [
+        {
+          type: ApplicationCommandOptionType.String,
+          name: 'category_list',
+          description: "Case insensitive comma or space separated list, e.g. 'JavaScript, async,webhook'",
+          required: true,
+          choices: undefined
+        }
+      ]
+    },
+    {
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'list_categories',
+      description: 'List resource categories.',
+      options: []
+    },
+    {
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'add_resource',
+      description: 'Add new resource',
+      options: [
+        {
+          type: ApplicationCommandOptionType.String,
+          name: 'title',
+          description: 'Resource title',
+          required: true,
+          choices: undefined
+        },
+        {
+          type: ApplicationCommandOptionType.String,
+          name: 'description',
+          description: 'Resource description',
+          required: true,
+          choices: undefined
+        },
+        {
+          type: ApplicationCommandOptionType.String,
+          name: 'url',
+          description: 'Resource URL',
+          required: true,
+          choices: undefined
+        },
+        {
+          type: ApplicationCommandOptionType.String,
+          name: 'categories',
+          description: "Case insensitive comma or space separated list, e.g. 'JavaScript, async,webhook'",
+          required: true,
+          choices: undefined
+        },
+        {
+          type: ApplicationCommandOptionType.String,
+          name: 'img',
+          description: 'Image URL.',
+          required: false,
+          choices: undefined
+        },
+      ]
+    },
+    {
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'remove_resource',
+      description: 'Remove a resource (Requires admin privilege).',
+      options: []
+    },
+    {
+      type: ApplicationCommandOptionType.Subcommand,
+      name: 'add_categories',
+      description: 'Add new resource categories.',
+      options: [
+        {
+          type: ApplicationCommandOptionType.String,
+          name: 'categories',
+          description: "Case insensitive comma separated list, e.g. 'JavaScript, async,webhook'",
+          required: true,
+          choices: undefined
+        }
+      ]
+    }
+  ],
+  execute
+}
