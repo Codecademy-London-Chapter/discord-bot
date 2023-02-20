@@ -1,14 +1,18 @@
-import { 
+import {
   CommandInteraction,
   ModalSubmitInteraction
 } from 'discord.js';
 
 export default async function handleError(
-  interaction: CommandInteraction|ModalSubmitInteraction,
+  interaction: CommandInteraction | ModalSubmitInteraction,
   msg: string
 ): Promise<void> {
-  await interaction.followUp({
-    content: 'Error: ' + msg,
-    ephemeral: true
-  });
+  try {
+    await interaction.followUp({
+      content: 'Error: ' + msg,
+      ephemeral: true
+    });
+  } catch (e) {
+    console.error(e);
+  }
 }

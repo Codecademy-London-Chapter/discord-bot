@@ -1,29 +1,28 @@
-import { 
+import {
   EmbedBuilder,
   CommandInteraction,
 } from 'discord.js';
 import { DataSource } from 'typeorm';
 import Resource from '../../../entities/Resource';
 import handleError from '../../../handlers/handleError';
+import getCategoriesFromString from './utils/getCategoriesFromString';
 
 export default async function searchResources(
-  interaction: CommandInteraction, 
+  interaction: CommandInteraction,
   connection: DataSource,
-  data: string|null
+  categories: string | null
 ): Promise<void> {
 
-  let categories: string[] = [];
-  if (data && data.length) {
-    categories = data
-      .toLowerCase()
-      .split(/\,\s|\,|\s/g)
-      .filter(e => e);
+  if (!categories || !categories.length) {
+    await handleError(interaction, 'Invalid categories');
+    return;
   }
 
-  if (!categories.length) {
-    await interaction.followUp({ 
-      content: 'Invalid category'
-    });
+  // split categories string
+  const categoryList = getCategoriesFromString(categories);
+
+  if (!categoryList || !categoryList.length) {
+    await handleError(interaction, 'Invalid categories');
     return;
   }
 
@@ -31,7 +30,7 @@ export default async function searchResources(
   let resources: Resource[] = [];
   try {
 
-    const promises = categories.map((category) => {
+    const promises = categoryList.map((category) => {
       return resourceRepository
         .createQueryBuilder("resources")
         .innerJoinAndSelect("resources.resourceCategories", "resourceCategories")
@@ -76,8 +75,8 @@ export default async function searchResources(
       // EmbedBuilder field values must be non empty string
       if (row.resourceCategories.length) {
         const categories = row.resourceCategories.map(e => e.category).join(', ');
-        tmp.addFields({ 
-          name: 'Matched categories', 
+        tmp.addFields({
+          name: 'Matched categories',
           value: categories
         });
       }
@@ -88,9 +87,14 @@ export default async function searchResources(
     return;
   }
 
-  await interaction.followUp({ 
-    content: embed.length ? 'Resources:' : 'No resources found',
-    embeds: embed
-  });
-  return;
+  try {
+    await interaction.followUp({
+      content: embed.length ? 'Resources:' : 'No resources found',
+      embeds: embed
+    });
+    return;
+  } catch (e) {
+    await handleError(interaction, e.message);
+    return;
+  }
 }
