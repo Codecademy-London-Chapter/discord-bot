@@ -82,4 +82,13 @@ describe("getCategoriesFromString", () => {
       expect(categories).toEqual([]);
     });
   });
+
+  describe("given a falsy value", () => {
+    it("should return an empty array", () => {
+      const categoryString = null as unknown as string;
+      const categories = getCategoriesFromString(categoryString);
+
+      expect(categories).toEqual([]);
+    });
+  });
 });

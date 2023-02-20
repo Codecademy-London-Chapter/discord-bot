@@ -2,7 +2,7 @@
 const categoryStringDelimiters = new RegExp(/\s*\,\s*/g);
 
 export default function getCategoriesFromString(categories: string): string[] {
-  if (!categories.length) {
+  if (!categories || !categories.length) {
     return [];
   }
 
